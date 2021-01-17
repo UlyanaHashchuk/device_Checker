@@ -16,7 +16,7 @@ const Text = styled.p`
       font-size: 12px;
       color: grey;
     `}
-    ${({ $small }) =>
+  ${({ $small }) =>
     $small &&
     css`
       font-size: 10px;

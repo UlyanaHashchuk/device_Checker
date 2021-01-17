@@ -21,7 +21,7 @@ const TopMenu = () => {
   const isAdmin = type === TYPE.admin
 
   return (
-    <BannerContainer verticalCenter>
+    <BannerContainer>
       <Link to="/devices">
         <LogoContainer>
           <img src={logoIcon} width="60px" height="60px" alt="logo" />

@@ -56,23 +56,4 @@ const Wrapper = styled(Flex)`
   }
 `
 
-const Icon = styled.div`
-  border-radius: 50%;
-  background-color: white;
-  color: #ff4d00;
-  font-size: 16px;
-  font-weight: 500;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 8px;
-
-  &:hover {
-    cursor: pointer;
-    background-color: #ffe1d4;
-  }
-`
-
-export { BannerContainer, LogoContainer, LogoutButton, Wrapper, Icon }
+export { BannerContainer, LogoContainer, LogoutButton, Wrapper }

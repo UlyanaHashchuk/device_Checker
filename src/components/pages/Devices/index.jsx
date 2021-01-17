@@ -33,8 +33,8 @@ const Devices = () => {
       getAllDevicesRequest({
         token,
       }).then((data) => {
-        setDevices(data)
         setIsLoading(false)
+        setDevices(data)
       })
     }
   }, [token, devices.length])
