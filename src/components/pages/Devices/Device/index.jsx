@@ -1,7 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react'
-import AuthContext from '../../../../contexts/AuthContext'
-import { borrowPhoneRequest, returnPhoneRequest } from '../../../../api'
+import React from 'react'
 import { DEVICE_STATE } from '../../../../constants'
+import useBorrowedDevice from '../../../../hooks/useBorrowDevice'
 import noImage from '../../../../icons/noImage.png'
 import { Text, Button } from '../../../BaseStyles'
 import {
@@ -19,46 +18,11 @@ const Device = ({
   device: { id, image, model, os, osVersion, vendor, borrowed },
 }) => {
   const {
-    userInfo: { login, token },
-  } = useContext(AuthContext)
-  const [error, setError] = useState(null)
-
-  const getDeviceState = () => {
-    if (borrowed) {
-      if (login === borrowed.user.login) {
-        return DEVICE_STATE.borrowed
-      }
-
-      return DEVICE_STATE.notAvailable
-    }
-
-    return DEVICE_STATE.available
-  }
-
-  const [deviceState, setDeviceState] = useState(getDeviceState())
-  const isBorrowedByCurrentUser = deviceState === DEVICE_STATE.borrowed
-
-  const handleClick = () => {
-    if (deviceState === DEVICE_STATE.available) {
-      borrowPhoneRequest({ token, id })
-        .then(() => {
-          setError(null)
-          setDeviceState(DEVICE_STATE.borrowed)
-        })
-        .catch(({ error }) => {
-          setError(error)
-        })
-    } else if (deviceState === DEVICE_STATE.borrowed) {
-      returnPhoneRequest({ token, id })
-        .then(() => {
-          setError(null)
-          setDeviceState(DEVICE_STATE.available)
-        })
-        .catch(({ error }) => {
-          setError(error)
-        })
-    }
-  }
+    deviceState,
+    handleClick,
+    isBorrowedByCurrentUser,
+    error,
+  } = useBorrowedDevice(borrowed, id)
 
   return (
     <DeviceContainer>

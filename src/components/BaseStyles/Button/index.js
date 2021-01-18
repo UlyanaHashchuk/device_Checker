@@ -12,22 +12,21 @@ const Button = styled.button`
   padding: 10px 5px;
   margin-top: 20px;
 
-  ${({ disabled }) =>
-    disabled &&
-    css`
-      background-color: grey;
-    `}
-  ${({ disabled }) =>
-    !disabled &&
-    css`
+  ${({ disabled }) => {
+    if (disabled) {
+      return `background-color: grey;`
+    }
+
+    return css`
       &:hover {
         cursor: pointer;
         transition: 0.2s ease-in-out;
         background-color: #fc753a;
       }
-    `}
+    `
+  }}
 
-    ${({ canReturn }) =>
+  ${({ canReturn }) =>
     canReturn &&
     css`
       background-color: #ab51cf;

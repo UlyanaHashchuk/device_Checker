@@ -13,6 +13,7 @@ const Input = styled.input`
     css`
       width: 100%;
     `}
+
   ${({ $transparent }) =>
     $transparent &&
     css`

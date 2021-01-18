@@ -1,26 +1,18 @@
-import React, { useState, useContext } from 'react'
-import { Redirect } from 'react-router-dom'
-import AuthContext from '../../../contexts/AuthContext'
-import { SYSTEM_OPTIONS, VENDOR_OPTIONS } from '../../../constants'
-import { addPhoneRequest } from '../../../api'
+import React, { useState } from 'react'
+import {
+  SYSTEM_OPTIONS,
+  VENDOR_OPTIONS,
+  AUTHENTICATION,
+} from '../../../constants'
 import { Text, Input, Button, Dropdown } from '../../BaseStyles'
 import { Container, Wrapper, Form } from './index.styled'
+import useCreateDevice from '../../../hooks/useCreateDevice'
 
 const CreateDevice = () => {
-  const {
-    userInfo: { token },
-  } = useContext(AuthContext)
-  const [formData, setFormData] = useState({
-    code: '',
-    model: '',
-    vendor: '',
-    os: '',
-    osVersion: '',
-    image: '',
-  })
-  const [submitStages, setSubmitStages] = useState('PŘIDAT ZAŘÍZENÍ')
-  const [error, setError] = useState(null)
-  const [shouldRedirect, setShouldRedirect] = useState(false)
+  const { handleSubmit, formData, setFormData, error } = useCreateDevice()
+  const [submitStages, setSubmitStages] = useState(
+    AUTHENTICATION.unauthenticated
+  )
 
   const handleChange = (value, key) => {
     setFormData((prevState) => ({
@@ -29,40 +21,11 @@ const CreateDevice = () => {
     }))
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-
-    if (formData.vendor === '') {
-      setError('Vyberte prosím Výrobce')
-    } else if (formData.os === '') {
-      setError('Vyberte prosím Operační systém')
-    } else {
-      setSubmitStages('Ukládání...')
-
-      addPhoneRequest({
-        token,
-        formData,
-      })
-        .then(() => {
-          setSubmitStages('Uložené!')
-          setError(null)
-          setShouldRedirect(true)
-        })
-        .catch(({ error }) => {
-          setError(error)
-        })
-    }
-  }
-
-  if (shouldRedirect) {
-    return <Redirect to="/devices" delay={3000} />
-  }
-
   return (
     <Wrapper>
       <Container>
         <Text $header>Nové zařízení</Text>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={(event) => handleSubmit(event, setSubmitStages)}>
           <Input
             type="text"
             placeholder="Kódové označení(identifikátor)"
@@ -112,8 +75,14 @@ const CreateDevice = () => {
             $fill
           />
           {error && <Text>*{error}</Text>}
-          <Button type="submit" disabled={submitStages !== 'PŘIDAT ZAŘÍZENÍ'}>
-            {submitStages}
+          <Button
+            type="submit"
+            disabled={submitStages !== AUTHENTICATION.unauthenticated}
+          >
+            {submitStages === AUTHENTICATION.unauthenticated &&
+              'PŘIDAT ZAŘÍZENÍ'}
+            {submitStages === AUTHENTICATION.authenticating && 'Ukládání...'}
+            {submitStages === AUTHENTICATION.authenticated && 'Uložené!'}
           </Button>
         </Form>
       </Container>

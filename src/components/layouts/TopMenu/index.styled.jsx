@@ -26,6 +26,7 @@ const LogoContainer = styled(Flex)`
     h2 {
       display: none;
     }
+
     img {
       width: 40px;
       height: 40px;

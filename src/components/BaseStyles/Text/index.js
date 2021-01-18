@@ -10,12 +10,14 @@ const Text = styled.p`
     css`
       font-size: 24px;
     `}
+
   ${({ $note }) =>
     $note &&
     css`
       font-size: 12px;
       color: grey;
     `}
+    
   ${({ $small }) =>
     $small &&
     css`

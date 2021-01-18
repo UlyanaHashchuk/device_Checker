@@ -8,39 +8,35 @@ const DeviceList = ({
   selectedOptions: { os: selectedOs, vendor: selectedVendor },
   searchInput,
 }) => {
-  const getFilteredDevices = () => {
-    let filteredDevices = [...devices]
+  let filteredDevices = devices
 
-    if (showAvailable) {
-      filteredDevices = filteredDevices.filter(({ borrowed }) => !borrowed)
-    }
+  if (showAvailable) {
+    filteredDevices = filteredDevices.filter(({ borrowed }) => !borrowed)
+  }
 
-    if (selectedOs !== 'Nezáleží') {
-      filteredDevices = filteredDevices.filter(
-        ({ os }) => os && os.toLowerCase() === selectedOs.toLowerCase()
-      )
-    }
+  if (selectedOs !== 'Nezáleží') {
+    filteredDevices = filteredDevices.filter(
+      ({ os }) => os && os.toLowerCase() === selectedOs.toLowerCase()
+    )
+  }
 
-    if (selectedVendor !== 'Nezáleží') {
-      filteredDevices = filteredDevices.filter(
-        ({ vendor }) =>
-          vendor && vendor.toLowerCase() === selectedVendor.toLowerCase()
-      )
-    }
+  if (selectedVendor !== 'Nezáleží') {
+    filteredDevices = filteredDevices.filter(
+      ({ vendor }) =>
+        vendor && vendor.toLowerCase() === selectedVendor.toLowerCase()
+    )
+  }
 
-    if (searchInput !== '') {
-      filteredDevices = filteredDevices.filter(
-        ({ model }) =>
-          model && model.toLowerCase().includes(searchInput.toLowerCase())
-      )
-    }
-
-    return filteredDevices
+  if (searchInput !== '') {
+    filteredDevices = filteredDevices.filter(
+      ({ model }) =>
+        model && model.toLowerCase().includes(searchInput.toLowerCase())
+    )
   }
 
   return (
     <Container>
-      {getFilteredDevices().map((device) => (
+      {filteredDevices.map((device) => (
         <Device key={device.id} device={device} />
       ))}
     </Container>
